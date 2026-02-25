@@ -1,7 +1,7 @@
 import { httpClient } from '@/shared/api/httpClient';
 import { config } from '@/shared/config/api';
 import { Movie, MovieFilters } from '../model/types';
-import { MovieApiResponse, MovieDetailsApiResponse } from './movieApi.types';
+import { MovieApiResponse, MovieDetailsApiResponse, MovieCreditsApiResponse, MovieVideosApiResponse } from './movieApi.types';
 import { mapApiMovieToMovie, mapApiMovieDetailsToMovie } from '../model/mappers';
 
 export const movieApi = {
@@ -47,6 +47,22 @@ export const movieApi = {
     });
 
     return mapApiMovieDetailsToMovie(response.data);
+  },
+
+  async getMovieCredits(id: string) {
+    const response = await httpClient.get<MovieCreditsApiResponse>(`/movie/${id}/credits`, {
+      params: { api_key: config.apiKey },
+    });
+
+    return response.data;
+  },
+
+  async getMovieVideos(id: string) {
+    const response = await httpClient.get<MovieVideosApiResponse>(`/movie/${id}/videos`, {
+      params: { api_key: config.apiKey },
+    });
+
+    return response.data;
   },
 
   async getGenres(): Promise<{ id: string; name: string }[]> {
