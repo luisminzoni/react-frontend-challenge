@@ -3,7 +3,7 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className = '' }: SkeletonProps) {
-	return <div className={["bg-muted animate-pulse rounded", className].filter(Boolean).join(' ')} />;
+	return <div className={["skeleton-shimmer bg-muted rounded", className].filter(Boolean).join(' ')} />;
 }
 
 export default Skeleton;

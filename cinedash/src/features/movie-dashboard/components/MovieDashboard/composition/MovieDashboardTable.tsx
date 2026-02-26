@@ -8,6 +8,7 @@ import { useThemeStore } from '@/entities/theme/store/themeStore';
 import { goToMovie } from '@/shared/lib/navigation';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Star } from 'lucide-react';
 
 interface MovieDashboardTableProps {
@@ -17,7 +18,7 @@ interface MovieDashboardTableProps {
 export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps) {
 	const filters = useMovieUiStore((s) => s.filters);
 	const setFilters = useMovieUiStore((s) => s.setFilters);
-	const { data } = useMovies(filters);
+	const { data, isLoading } = useMovies(filters);
 	const { data: genreList } = useMovieGenres();
 	const theme = useThemeStore((s) => s.theme);
 
@@ -99,6 +100,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 
 	const totalPages = data?.totalPages ?? 1;
 	const isDark = theme === 'dark';
+	const showSkeleton = isLoading && movies.length === 0;
 
 	const currentPage = filters.page ?? 1;
 
@@ -133,14 +135,24 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 						</tr>
 					</TableHeader>
 					<TableBody className={isDark ? '[&>tr:nth-child(odd)]:bg-slate-900 [&>tr:nth-child(even)]:bg-slate-800' : '[&>tr:nth-child(odd)]:bg-white [&>tr:nth-child(even)]:bg-gray-200'}>
-						{movies.length === 0 && (
+						{showSkeleton &&
+							Array.from({ length: 6 }).map((_, index) => (
+								<TableRow key={`skeleton-row-${index}`}>
+									<TableCell className="p-3 align-top"><Skeleton className="h-4 w-48" /></TableCell>
+									<TableCell className="p-3 align-top"><Skeleton className="h-4 w-12" /></TableCell>
+									<TableCell className="p-3 align-top"><Skeleton className="h-4 w-32" /></TableCell>
+									<TableCell className="p-3 align-top"><Skeleton className="h-4 w-12" /></TableCell>
+									<TableCell className="p-3 align-top"><Skeleton className="h-8 w-28 rounded-[10px]" /></TableCell>
+								</TableRow>
+							))}
+						{!showSkeleton && movies.length === 0 && (
 							<TableRow>
 								<TableCell className="p-4 text-center text-muted-foreground" colSpan={5}>
 									Nenhum filme encontrado.
 								</TableCell>
 							</TableRow>
 						)}
-						{sortedMovies.map((m) => (
+						{!showSkeleton && sortedMovies.map((m) => (
 							<TableRow key={m.id} className={isDark ? 'hover:bg-slate-700/70 cursor-pointer transition-colors' : 'hover:bg-gray-100 cursor-pointer transition-colors'} onClick={() => goToMovie(String(m.id))}>
 								<TableCell className="p-3 align-top">{m.title}</TableCell>
 								<TableCell className="p-3 align-top">{m.releaseDate ? new Date(m.releaseDate).getFullYear() : '—'}</TableCell>
