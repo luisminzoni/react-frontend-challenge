@@ -88,10 +88,6 @@ function App() {
                 Minha Lista
               </Button>
 
-              <Button variant="ghost" size="sm" className="rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => logout()}>
-                Sair
-              </Button>
-
               <Button
                 variant="ghost"
                 size="sm"
@@ -99,6 +95,9 @@ function App() {
                 onClick={() => toggleTheme()}
               >
                 {theme === 'dark' ? 'Tema Claro' : 'Tema Escuro'}
+              </Button>
+              <Button variant="ghost" size="sm" className="rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => logout()}>
+                Sair
               </Button>
             </div>
           </header>

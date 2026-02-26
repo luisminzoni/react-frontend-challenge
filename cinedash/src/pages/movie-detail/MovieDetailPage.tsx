@@ -33,7 +33,7 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 
 	return (
 		<div className="p-6">
-			<div className="flex items-start">
+			<div className="flex flex-col md:flex-row items-start gap-6">
 				<div>
 					{movie.posterPath && <img src={movie.posterPath} alt={movie.title} className="w-48 rounded" />}
 				</div>
@@ -61,7 +61,7 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 			</div>
 
 			{trailer && (
-				<div className="mt-6">
+				<div className="mt-6 hidden md:block">
 					<h3 className="text-lg font-medium">Trailer</h3>
 					<div className="mt-2">
 						<iframe
