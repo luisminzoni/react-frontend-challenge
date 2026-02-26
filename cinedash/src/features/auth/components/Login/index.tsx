@@ -39,8 +39,11 @@ export function Login() {
           {errors.password && <p className="text-red-600 text-sm">{errors.password.message}</p>}
         </div>
 
-        <div className="flex justify-end">
-          <button type="submit" className="px-4 py-2 bg-primary text-white rounded">
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="px-4 py-2 mt-2 rounded border bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] border-[hsl(var(--border))]"
+          >
             Entrar
           </button>
         </div>

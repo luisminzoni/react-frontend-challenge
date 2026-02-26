@@ -8,6 +8,13 @@ interface Props {
 	movieId?: string;
 }
 
+function formatDatePtBr(date: string) {
+	if (!date) return '—';
+	const [year, month, day] = date.split('-');
+	if (!year || !month || !day) return date;
+	return `${day}/${month}/${year}`;
+}
+
 export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 	const id = movieIdProp ?? String(window.location.pathname.split('/').pop() || '');
 
@@ -30,6 +37,8 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 
 	if (isLoading || !movie) return <div className="p-6">Carregando...</div>;
 
+	const formattedReleaseDate = formatDatePtBr(movie.releaseDate);
+
 	const trailer = (videos?.results || []).find((v: any) => v.site === 'YouTube' && /trailer/i.test(v.type));
 
 	return (
@@ -40,7 +49,7 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 				</div>
 				<div className="flex-1">
 					<h2 className="text-2xl font-semibold">{movie.title}</h2>
-					<div className="text-sm text-muted-foreground mb-2">{movie.releaseDate}</div>
+					<div className="text-sm text-muted-foreground mb-2">{formattedReleaseDate}</div>
 					<div className="mb-4">Avaliação: {movie.rating.toFixed(1)}</div>
 					<div className="mb-4">{movie.overview}</div>
 					<button onClick={() => toggleFavorite(movie)} className="px-3 py-1 border rounded">
