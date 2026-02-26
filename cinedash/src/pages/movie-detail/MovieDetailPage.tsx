@@ -34,7 +34,7 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 
 	return (
 		<div className="p-6">
-			<div className="flex items-start gap-6">
+			<div className="flex items-start">
 				<div>
 					{movie.poster && <img src={movie.poster} alt={movie.title} className="w-48 rounded" />}
 				</div>

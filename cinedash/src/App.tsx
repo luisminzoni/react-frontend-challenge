@@ -6,6 +6,7 @@ import { useAuthStore } from './entities/auth/store/authStore';
 import WatchlistPage from './pages/watchlist/WatchlistPage';
 import MovieDetailPage from './pages/movie-detail/MovieDetailPage';
 import { goHome, goToWatchlist } from './shared/lib/navigation';
+import { Button } from './components/ui/button';
 
 function App() {
   const isAuth = useAuthStore((s) => s.isAuthenticated());
@@ -53,35 +54,44 @@ function App() {
         <div>
           <header className="p-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold">CineDash</h1>
+              {view === 'dashboard' ? (
+                <MovieDashboard.Header title="CineDash" subtitle="Dashboard de filmes" />
+              ) : (
+                <div />
+              )}
             </div>
             <div className="flex items-center gap-2">
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-[10px] active:scale-95 active:bg-muted/30"
                 onClick={() => { goHome(); setView('dashboard'); }}
-                className={`px-3 py-1 rounded ${view === 'dashboard' ? 'bg-slate-200' : 'border'}`}>
+              >
                 Dashboard
-              </button>
-              <button
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-[10px] active:scale-95 active:bg-muted/30"
                 onClick={() => { goToWatchlist(); setView('watchlist'); }}
-                className={`px-3 py-1 rounded ${view === 'watchlist' ? 'bg-slate-200' : 'border'}`}>
+              >
                 Minha Lista
-              </button>
-              <button onClick={() => logout()} className="px-3 py-1 border rounded">
+              </Button>
+
+              <Button variant="ghost" size="sm" className="rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => logout()}>
                 Sair
-              </button>
+              </Button>
             </div>
           </header>
 
           {view === 'dashboard' ? (
             <MovieDashboard.Root>
-              <MovieDashboard.Header title="CineDash" subtitle="Dashboard de filmes" />
               <MovieDashboard.Filters />
-              <MovieDashboard.Stats />
+              {/* <MovieDashboard.Stats /> //TODO: apagar  */}
               <MovieDashboard.Table />
             </MovieDashboard.Root>
           ) : window.location.pathname.startsWith('/movie/') ? (
-            // render movie detail when URL matches /movie/:id
-            // MovieDetailPage will read id from pathname
             <MovieDetailPage />
           ) : (
             <WatchlistPage />

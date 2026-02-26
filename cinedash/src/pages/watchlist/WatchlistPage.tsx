@@ -1,6 +1,8 @@
 import React from 'react';
 import { useMovieFavoritesStore } from '@/entities/movie/store/movieFavoritesStore';
 import { useMovieGenres } from '@/entities/movie/hooks/useMovieGenres';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
 
 export function WatchlistPage() {
   const favorites = useMovieFavoritesStore((s) => s.favorites);
@@ -38,9 +40,14 @@ export function WatchlistPage() {
                 <td className="p-2">{m.releaseDate ? new Date(m.releaseDate).getFullYear() : '—'}</td>
                 <td className="p-2">{m.rating.toFixed(1)}</td>
                 <td className="p-2">
-                  <button onClick={() => removeFavorite(m.id)} className="px-2 py-1 border rounded">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="rounded-[10px] px-2 py-1 text-xs"
+                    onClick={() => removeFavorite(m.id)}
+                  >
                     Remover
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}

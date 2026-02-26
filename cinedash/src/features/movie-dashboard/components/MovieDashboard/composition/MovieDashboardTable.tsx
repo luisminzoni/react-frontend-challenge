@@ -5,6 +5,9 @@ import { Movie } from '@/entities/movie/model/types';
 import { useMovieFavoritesStore } from '@/entities/movie/store/movieFavoritesStore';
 import { useMovieGenres } from '@/entities/movie/hooks/useMovieGenres';
 import { goToMovie } from '@/shared/lib/navigation';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
 
 interface MovieDashboardTableProps {
 	className?: string;
@@ -70,13 +73,25 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 		const toggleFavorite = useMovieFavoritesStore((s) => s.toggleFavorite);
 		const isFav = useMovieFavoritesStore((s) => s.isFavorite(movie.id));
 		return (
-			<button
-				onClick={() => toggleFavorite(movie)}
-				className="px-2 py-1 border rounded"
+			<Button
+				variant={isFav ? 'destructive' : 'outline'}
+				size="sm"
+				className="rounded-[10px] px-2 py-1 text-xs focus:outline-none focus:ring-0 ring-0 shadow-sm min-w-[108px] justify-center border border-input"
+				onClick={(e) => {
+					e.stopPropagation();
+					toggleFavorite(movie);
+				}}
 				aria-pressed={isFav}
+				title={isFav ? 'Remover da minha lista' : 'Adicionar à minha lista'}
 			>
-				{isFav ? '★ Remover' : '☆ Favoritar'}
-			</button>
+			<Star
+			size={14}
+			className="transition-all"
+			stroke={isFav ? '#eab308' : 'currentColor'}
+			fill={isFav ? '#eab308' : 'none'}
+			/>
+				<span className="ml-2">{isFav ? 'Remover' : 'Favoritar'}</span>
+			</Button>
 		);
 	}
 
@@ -92,69 +107,60 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 	return (
 		<div className={className}>
 			<div className="overflow-auto">
-				<table className="min-w-full table-auto">
-					<thead>
-								<tr>
-									<th className="text-left p-2">
-										<button onClick={() => toggleSort('title')} className="font-medium">
-											Título
-										</button>
-									</th>
-									<th className="text-left p-2">Ano</th>
-									<th className="text-left p-2">
-										<button onClick={() => toggleSort('genre')} className="font-medium">
-											Gêneros
-										</button>
-									</th>
-									<th className="text-left p-2">
-										<button onClick={() => toggleSort('rating')} className="font-medium">
-											Avaliação
-										</button>
-									</th>
-									<th className="text-left p-2">Ações</th>
-								</tr>
-					</thead>
-					<tbody>
+				<Table className="bg-card rounded-lg shadow-sm">
+					<TableHeader>
+						<tr>
+							<TableHead className="p-3">
+								<Button variant="ghost" size="sm" className="font-medium rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => toggleSort('title')}>
+									Título
+								</Button>
+							</TableHead>
+							<TableHead className="p-3 w-24">Ano</TableHead>
+							<TableHead className="p-3 w-48">
+								<Button variant="ghost" size="sm" className="font-medium rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => toggleSort('genre')}>
+									Gêneros
+								</Button>
+							</TableHead>
+							<TableHead className="p-3 w-28">
+								<Button variant="ghost" size="sm" className="font-medium rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => toggleSort('rating')}>
+									Avaliação
+								</Button>
+							</TableHead>
+							<TableHead className="p-3 w-36">Ações</TableHead>
+						</tr>
+					</TableHeader>
+					<TableBody className="[&>tr:nth-child(odd)]:bg-white [&>tr:nth-child(even)]:bg-gray-200">
 						{movies.length === 0 && (
-							<tr>
-								<td className="p-2" colSpan={4}>
+							<TableRow>
+								<TableCell className="p-4 text-center text-muted-foreground" colSpan={5}>
 									Nenhum filme encontrado.
-								</td>
-							</tr>
+								</TableCell>
+							</TableRow>
 						)}
 						{sortedMovies.map((m) => (
-							<tr key={m.id} className="hover:bg-slate-50 cursor-pointer" onClick={() => goToMovie(String(m.id))}>
-								<td className="p-2">{m.title}</td>
-								<td className="p-2">{m.releaseDate ? new Date(m.releaseDate).getFullYear() : '—'}</td>
-								<td className="p-2">{(m.genres || []).slice(0, 2).map((id) => genreMap[id] ?? id).join(', ')}</td>
-								<td className="p-2">{m.rating.toFixed(1)}</td>
-								<td className="p-2" onClick={(e) => e.stopPropagation()}>
+							<TableRow key={m.id} className="hover:bg-muted/30 cursor-pointer transition-colors" onClick={() => goToMovie(String(m.id))}>
+								<TableCell className="p-3 align-top">{m.title}</TableCell>
+								<TableCell className="p-3 align-top">{m.releaseDate ? new Date(m.releaseDate).getFullYear() : '—'}</TableCell>
+								<TableCell className="p-3 align-top">{(m.genres || []).slice(0, 2).map((id) => genreMap[id] ?? id).join(', ')}</TableCell>
+								<TableCell className="p-3 align-top">{m.rating.toFixed(1)}</TableCell>
+								<TableCell className="p-3 align-top" onClick={(e) => e.stopPropagation()}>
 									<FavButton movie={m} />
-								</td>
-							</tr>
+								</TableCell>
+							</TableRow>
 						))}
-					</tbody>
-				</table>
+					</TableBody>
+				</Table>
 			</div>
-			<div className="flex items-center justify-between mt-4">
-				<div className="text-sm text-muted-foreground">
-					Página {currentPage} de {totalPages}
-				</div>
+
+			<div className="flex flex-col md:flex-row items-center justify-between gap-2 mt-4">
+				<div className="text-sm text-muted-foreground">Página {currentPage} de {totalPages}</div>
 				<div className="flex gap-2">
-					<button
-						onClick={() => goToPage(currentPage - 1)}
-						disabled={currentPage <= 1}
-						className="px-3 py-1 border rounded disabled:opacity-50"
-					>
+					<Button variant="ghost" size="sm" className="px-3 py-1 rounded" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>
 						Anterior
-					</button>
-					<button
-						onClick={() => goToPage(currentPage + 1)}
-						disabled={currentPage >= totalPages}
-						className="px-3 py-1 border rounded disabled:opacity-50"
-					>
+					</Button>
+					<Button variant="ghost" size="sm" className="px-3 py-1 rounded" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages}>
 						Próxima
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

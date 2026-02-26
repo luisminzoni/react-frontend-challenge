@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from '@/shared/utils/debounce';
 import { useMovieUiStore } from '@/entities/movie/store/movieUiStore';
 import { useMovieGenres } from '@/entities/movie/hooks/useMovieGenres';
+import { ChevronDown } from 'lucide-react';
 
 interface MovieDashboardFiltersProps {
 	className?: string;
@@ -50,42 +51,51 @@ export function MovieDashboardFilters({ className = '' }: MovieDashboardFiltersP
 
 	return (
 		<div className={className}>
-			<div className="flex flex-col md:flex-row gap-3 items-center">
-				<input
-					aria-label="search"
-					placeholder="Buscar título..."
-					value={query}
-					onChange={(e) => setQuery(e.target.value)}
-					className="border rounded px-2 py-1 flex-1"
-				/>
+			<div className="bg-card p-4 rounded-lg shadow-sm">
+				<div className="flex flex-col md:flex-row gap-3 items-center">
+					<input
+						aria-label="search"
+						placeholder="Buscar título..."
+						value={query}
+						onChange={(e) => setQuery(e.target.value)}
+						className="border rounded px-3 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-primary"
+					/>
 
-				<select value={genre} onChange={(e) => onGenreChange(e.target.value)} className="border rounded px-2 py-1">
-					<option value="">Todos os gêneros</option>
-					{genres?.map((g) => (
-						<option key={g.id} value={g.id}>
-							{g.name}
-						</option>
-					))}
-				</select>
+					<div className="relative">
+						<select
+							value={genre}
+							onChange={(e) => onGenreChange(e.target.value)}
+							className="border rounded pl-3 pr-9 py-2 bg-transparent appearance-none"
+						>
+							<option value="">Todos os gêneros</option>
+							{genres?.map((g) => (
+								<option key={g.id} value={g.id}>
+									{g.name}
+								</option>
+							))}
+						</select>
+						<ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+					</div>
 
-				<input
-					type="number"
-					placeholder="Ano"
-					value={year}
-					onChange={(e) => onYearChange(e.target.value)}
-					className="border rounded px-2 py-1 w-28"
-				/>
+					<input
+						type="number"
+						placeholder="Ano"
+						value={year}
+						onChange={(e) => onYearChange(e.target.value)}
+						className="border rounded px-3 py-2 w-28"
+					/>
 
-				<input
-					type="number"
-					placeholder="Nota mínima"
-					value={rating}
-					onChange={(e) => onRatingChange(Number(e.target.value))}
-					className="border rounded px-2 py-1 w-28"
-					min={0}
-					max={10}
-					step={0.1}
-				/>
+					<input
+						type="number"
+						placeholder="Nota mínima"
+						value={rating}
+						onChange={(e) => onRatingChange(Number(e.target.value))}
+						className="border rounded px-3 py-2 w-28"
+						min={0}
+						max={10}
+						step={0.1}
+					/>
+				</div>
 			</div>
 		</div>
 	);
