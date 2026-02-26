@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface AuthState {
   token: string | null;
@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'cinedash-auth',
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

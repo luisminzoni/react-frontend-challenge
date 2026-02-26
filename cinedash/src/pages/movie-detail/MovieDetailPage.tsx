@@ -1,4 +1,3 @@
-import React from 'react';
 import { useMovieDetails } from '@/entities/movie/hooks/useMovieDetails';
 import { movieApi } from '@/entities/movie/api/movieApi';
 import { useQuery } from '@tanstack/react-query';
@@ -36,7 +35,7 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 		<div className="p-6">
 			<div className="flex items-start">
 				<div>
-					{movie.poster && <img src={movie.poster} alt={movie.title} className="w-48 rounded" />}
+					{movie.posterPath && <img src={movie.posterPath} alt={movie.title} className="w-48 rounded" />}
 				</div>
 				<div className="flex-1">
 					<h2 className="text-2xl font-semibold">{movie.title}</h2>

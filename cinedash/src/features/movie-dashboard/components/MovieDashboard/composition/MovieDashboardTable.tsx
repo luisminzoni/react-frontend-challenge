@@ -4,6 +4,7 @@ import { useMovies } from '@/entities/movie/hooks/useMovies';
 import { Movie } from '@/entities/movie/model/types';
 import { useMovieFavoritesStore } from '@/entities/movie/store/movieFavoritesStore';
 import { useMovieGenres } from '@/entities/movie/hooks/useMovieGenres';
+import { useThemeStore } from '@/entities/theme/store/themeStore';
 import { goToMovie } from '@/shared/lib/navigation';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 	const setFilters = useMovieUiStore((s) => s.setFilters);
 	const { data } = useMovies(filters);
 	const { data: genreList } = useMovieGenres();
+	const theme = useThemeStore((s) => s.theme);
 
 	const movies: Movie[] = data?.movies ?? [];
 	const genreMap = (genreList || []).reduce<Record<string, string>>((acc, g) => {
@@ -96,6 +98,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 	}
 
 	const totalPages = data?.totalPages ?? 1;
+	const isDark = theme === 'dark';
 
 	const currentPage = filters.page ?? 1;
 
@@ -107,7 +110,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 	return (
 		<div className={className}>
 			<div className="overflow-auto">
-				<Table className="bg-card rounded-lg shadow-sm">
+				<Table className={isDark ? 'bg-slate-900 rounded-lg shadow-sm' : 'bg-white rounded-lg shadow-sm'}>
 					<TableHeader>
 						<tr>
 							<TableHead className="p-3">
@@ -129,7 +132,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 							<TableHead className="p-3 w-36">Ações</TableHead>
 						</tr>
 					</TableHeader>
-					<TableBody className="[&>tr:nth-child(odd)]:bg-white [&>tr:nth-child(even)]:bg-gray-200">
+					<TableBody className={isDark ? '[&>tr:nth-child(odd)]:bg-slate-900 [&>tr:nth-child(even)]:bg-slate-800' : '[&>tr:nth-child(odd)]:bg-white [&>tr:nth-child(even)]:bg-gray-200'}>
 						{movies.length === 0 && (
 							<TableRow>
 								<TableCell className="p-4 text-center text-muted-foreground" colSpan={5}>
@@ -138,7 +141,7 @@ export function MovieDashboardTable({ className = '' }: MovieDashboardTableProps
 							</TableRow>
 						)}
 						{sortedMovies.map((m) => (
-							<TableRow key={m.id} className="hover:bg-muted/30 cursor-pointer transition-colors" onClick={() => goToMovie(String(m.id))}>
+							<TableRow key={m.id} className={isDark ? 'hover:bg-slate-700/70 cursor-pointer transition-colors' : 'hover:bg-gray-100 cursor-pointer transition-colors'} onClick={() => goToMovie(String(m.id))}>
 								<TableCell className="p-3 align-top">{m.title}</TableCell>
 								<TableCell className="p-3 align-top">{m.releaseDate ? new Date(m.releaseDate).getFullYear() : '—'}</TableCell>
 								<TableCell className="p-3 align-top">{(m.genres || []).slice(0, 2).map((id) => genreMap[id] ?? id).join(', ')}</TableCell>

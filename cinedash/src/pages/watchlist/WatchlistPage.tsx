@@ -1,8 +1,6 @@
-import React from 'react';
 import { useMovieFavoritesStore } from '@/entities/movie/store/movieFavoritesStore';
 import { useMovieGenres } from '@/entities/movie/hooks/useMovieGenres';
 import { Button } from '@/components/ui/button';
-import { Star } from 'lucide-react';
 
 export function WatchlistPage() {
   const favorites = useMovieFavoritesStore((s) => s.favorites);

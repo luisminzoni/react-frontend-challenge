@@ -7,11 +7,20 @@ import WatchlistPage from './pages/watchlist/WatchlistPage';
 import MovieDetailPage from './pages/movie-detail/MovieDetailPage';
 import { goHome, goToWatchlist } from './shared/lib/navigation';
 import { Button } from './components/ui/button';
+import { useThemeStore } from './entities/theme/store/themeStore';
 
 function App() {
   const isAuth = useAuthStore((s) => s.isAuthenticated());
   const logout = useAuthStore((s) => s.logout);
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const [view, setView] = React.useState<'dashboard' | 'watchlist' | 'movie'>('dashboard');
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    root.style.colorScheme = theme;
+  }, [theme]);
 
   React.useEffect(() => {
     function handleNav(e: any) {
@@ -81,6 +90,15 @@ function App() {
 
               <Button variant="ghost" size="sm" className="rounded-[10px] active:scale-95 active:bg-muted/30" onClick={() => logout()}>
                 Sair
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="rounded-[10px] active:scale-95 active:bg-muted/30"
+                onClick={() => toggleTheme()}
+              >
+                {theme === 'dark' ? 'Tema Claro' : 'Tema Escuro'}
               </Button>
             </div>
           </header>
