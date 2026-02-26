@@ -61,10 +61,10 @@ function App() {
     <QueryClientProvider>
       {isAuth ? (
         <div>
-          <header className="p-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
+          <header className="p-4 pb-0 flex flex-col md:flex-row md:justify-between md:items-center items-start gap-3">
+            <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
               {view === 'dashboard' ? (
-                <MovieDashboard.Header title="CineDash" subtitle="Dashboard de filmes" />
+                <MovieDashboard.Header title="CineDash" subtitle="Seu Dashboard de filmes :)" />
               ) : (
                 <div />
               )}
