@@ -7,5 +7,7 @@ export const movieQueryKeys = {
   details: () => [...movieQueryKeys.all, 'detail'] as const,
   detail: (id: string) => [...movieQueryKeys.details(), id] as const,
   genres: () => [...movieQueryKeys.all, 'genres'] as const,
+  credits: (id: string) => [...movieQueryKeys.all, 'credits', id] as const,
+  videos: (id: string) => [...movieQueryKeys.all, 'videos', id] as const,
   stats: (filters: MovieFilters) => [...movieQueryKeys.all, 'stats', filters] as const,
 };

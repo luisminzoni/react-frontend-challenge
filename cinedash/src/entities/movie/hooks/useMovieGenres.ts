@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { movieApi } from '../api/movieApi';
+import { movieQueryKeys } from '../api/movieQueryKeys';
 
 export function useMovieGenres() {
   return useQuery({
-    queryKey: ['movies', 'genres'],
+    queryKey: movieQueryKeys.genres(),
     queryFn: () => movieApi.getGenres(),
     staleTime: 1000 * 60 * 60, // 1 hour
   });

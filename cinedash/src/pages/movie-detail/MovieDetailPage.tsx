@@ -1,5 +1,6 @@
 import { useMovieDetails } from '@/entities/movie/hooks/useMovieDetails';
 import { movieApi } from '@/entities/movie/api/movieApi';
+import { movieQueryKeys } from '@/entities/movie/api/movieQueryKeys';
 import { useQuery } from '@tanstack/react-query';
 import { useMovieFavoritesStore } from '@/entities/movie/store/movieFavoritesStore';
 
@@ -13,13 +14,13 @@ export function MovieDetailPage({ movieId: movieIdProp }: Props) {
 	const { data: movie, isLoading } = useMovieDetails(id as string);
 
 	const { data: credits } = useQuery({
-		queryKey: ['movie', id, 'credits'],
+		queryKey: movieQueryKeys.credits(id),
 		queryFn: () => movieApi.getMovieCredits(id as string),
 		enabled: !!id,
 	});
 
 	const { data: videos } = useQuery({
-		queryKey: ['movie', id, 'videos'],
+		queryKey: movieQueryKeys.videos(id),
 		queryFn: () => movieApi.getMovieVideos(id as string),
 		enabled: !!id,
 	});

@@ -28,14 +28,14 @@ export function Login() {
       <h2 className="text-2xl font-semibold mb-4">Entrar</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
         <div>
-          <label className="block text-sm">Email</label>
-          <input {...register('email')} className="w-full border rounded px-2 py-1" />
+          <label htmlFor="login-email" className="block text-sm">Email</label>
+          <input id="login-email" {...register('email')} className="w-full border rounded px-2 py-1" />
           {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
         </div>
 
         <div>
-          <label className="block text-sm">Senha</label>
-          <input type="password" {...register('password')} className="w-full border rounded px-2 py-1" />
+          <label htmlFor="login-password" className="block text-sm">Senha</label>
+          <input id="login-password" type="password" {...register('password')} className="w-full border rounded px-2 py-1" />
           {errors.password && <p className="text-red-600 text-sm">{errors.password.message}</p>}
         </div>
 
